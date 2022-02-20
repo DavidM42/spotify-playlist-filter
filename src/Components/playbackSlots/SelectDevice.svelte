@@ -3,6 +3,7 @@
 	import KeyboardControlMap from "../hardware/KeyboardControlMap.svelte";
 
 	export let wrapper: WebPlayback;
+	export let clientName: string;
 </script>
 
 <KeyboardControlMap
@@ -27,7 +28,7 @@
 	</div>
 	<div class="connect-device-list-item__info">
 		<div class="connect-device-title-hifi-container">
-			Playlist Filter App
+			{clientName}
 		</div>
 		<div class="connect-device-title-hifi-container">
             <div>

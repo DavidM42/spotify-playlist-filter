@@ -16,7 +16,7 @@
 
 <div id="container">
 	<!-- TODO i18n -->
-	<h1>Welcome to Playlist Filter</h1>
+	<h1>Welcome to Skimify</h1>
 	<span class="description">
 		A tool to quickly skim through songs in playlists and add them to your own preffered playlist
 	</span>
@@ -24,7 +24,7 @@
 	<WebPlayback {client_id} bind:this={wrapper} {scopes} name={appName}>
 		<Login slot="login" {wrapper} />
 		<Loading slot="loading" />
-		<SelectDevice slot="waiting" {wrapper} />
+		<SelectDevice slot="waiting" {wrapper} clientName={appName} />
 
 		<!-- TODO if already playing on some device then allow to continue playing there while using it -->
 

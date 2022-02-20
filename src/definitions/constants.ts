@@ -1,4 +1,4 @@
-export const appName = 'Playlist Filter App';
+export const appName = 'Skimify';
 
 // replaced by rollup bundler with client id out of env variables
 export const client_id = 'SPOTIFY_CLIENT_ID';

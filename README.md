@@ -1,4 +1,4 @@
-# Spotify Playlist Filter App
+# Skimify
 
 The goal of this project is to improve my workflow of discovering new music.
 I always follow new playlists on Spotify but never find the time to listen through all of them.
