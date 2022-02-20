@@ -74,7 +74,6 @@
 
 		debounce(eventName, () => {
 			if (vibrationLength) {
-				console.log('Funcrion called')
 				vibrateDeviceAndGamepad(vibrationLength);
 			}
 			dispatch(eventName);

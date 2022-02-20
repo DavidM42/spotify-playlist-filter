@@ -17,6 +17,7 @@
 		{/if}
 	</div>
 	<div id="volumebar-wrapper">
+		<!-- could be refactored with https://svelte.dev/tutorial/tweened -->
 		<div id="volumebar">
 			<div style="width: {volume * 100}%;" />
 		</div>

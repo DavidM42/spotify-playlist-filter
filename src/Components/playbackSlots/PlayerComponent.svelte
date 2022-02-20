@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
+
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import SpotifyWebApi from 'spotify-web-api-js';
 	import FaLongArrowAltRight from 'svelte-icons/fa/FaLongArrowAltRight.svelte'
+	import IoIosPlay from 'svelte-icons/io/IoIosPlay.svelte'
 
 	import GamepadControlMap from '../hardware/GamepadControlMap.svelte';
 	import KeyboardControlMap from '../hardware/KeyboardControlMap.svelte';
@@ -14,6 +17,19 @@
 	let isKeyboardUsed: boolean = false;
 	let activateKeyboardListener = true;
 
+	const checkForPlaylistEnd = () => {
+		// had tip here but does not work :(
+		// TODO fix prevent auto play and notify user that he has finished playlist
+		// https://github.com/spotify/android-sdk/issues/90#issuecomment-509987849
+		if (state.context.uri && !(state.context.uri as any).includes('playlist')) {
+			// if context exists but is not a playlist then probably auto plays or something so stop it
+			player.pause();
+			sourcePlaylist = undefined;
+			toast.push('Playlist finished. Good job! On to the next one', successToastOptions);
+		}
+	}
+	player.addListener('player_state_changed', checkForPlaylistEnd)
+
 	/**
 	 * Every half second this variable get's assigned the current track position.
 	 * Is need for change detection.
@@ -23,6 +39,7 @@
 	const updateCurrentTimeEveryHalfSecondInMs = async () => {
 		// TODO maybe find smarter way of change detection to do this
 		currentTimeEveryHalfSecondInMs = (await player.getCurrentState()).position
+		// checkForPlaylistEnd();
 		setTimeout(updateCurrentTimeEveryHalfSecondInMs, 500);
 	}
 	updateCurrentTimeEveryHalfSecondInMs();
@@ -172,14 +189,18 @@
 		activateKeyboardListener = false;
 	}
 
+	/** is true when ui should give user extra obious play button to get going. Otherwise false */
+	let hintAtPlayStart = false;;
+
 	/**
 	 * Check on select if both have been selected and auto starts playback
 	 */
 	const onFinishedInput = async (event: CustomEvent<SpotifyApi.PlaylistObjectSimplified>) => {
-		if (event.detail.id === savedSourcePlaylist.id || event.detail.id === savedTargetPlaylist.id) {
+		// since we now only hint at it now autplay directly this is not needed atm
+		// if (event.detail.id === savedSourcePlaylist.id || event.detail.id === savedTargetPlaylist.id) {
 			// dont autostart playback when previously saved playlists were auto selected
-			return;
-		}
+			// return;
+		// }
 
 		activateKeyboardListener = true;
 		await loadingToken;
@@ -193,9 +214,8 @@
 		}
 
 		if (sourcePlaylist && targetPlaylist) {
-			console.log('All playlists selected. Will auto start playback now.');
-			initialPlay = false;
-			spotifyApi.play({ context_uri: sourcePlaylist.uri });
+			console.log('All playlists selected. Hinting play start now.');
+			hintAtPlayStart = true;
 		}
 	};
 
@@ -285,9 +305,22 @@
 				on:focus={onStartInput}
 			/>
 		</div>
-		<div class="playlist-direction-arrow">
-			<FaLongArrowAltRight/>
+
+		<div class="between-playlists">
+			{#if hintAtPlayStart}
+				<div class="start-hint" in:fade on:click={() => {
+					hintAtPlayStart = false;
+					togglePlayback();
+				}}>
+					<IoIosPlay/>
+				</div>
+			{:else}
+				<div class="playlist-direction-arrow" in:fade>
+					<FaLongArrowAltRight/>
+				</div>
+			{/if}
 		</div>
+
 
 		<div class="playlist-selection">
 			<PlaylistSearchAutocomplete
@@ -329,21 +362,42 @@
 		padding: 10px;
 
 		// sizing
-		max-width: 800px;
+		max-width: 1024px;
 		width: 100%;
 
 		& > #playlist-selection-container {
 			width: 100%;
 			display: flex;
 			flex-direction: row;
-			justify-content: space-evenly;
+			flex-wrap: wrap;
+			justify-content: space-around;
 
 			margin-bottom: 100px;
 
-			& > .playlist-direction-arrow {
-				height: 56px;
-				width: auto;
+			& .between-playlists {
 				color: var(--essential-bright-accent, #1ed760);
+
+				// all the inner wrappers of custom component icons
+				& div {
+					height: 56px;
+					width: auto;
+					
+					// center svg too 
+					display: flex;
+					justify-content: center;
+					align-content: center;
+				}
+
+				& .start-hint {
+					cursor: pointer;
+
+					&:hover {
+						transform: scale(1.06);
+						transition: none 33ms cubic-bezier(.3,0,0,1);
+							transition-property: none;
+						transition-property: all;
+					}
+				}
 			}
 		}
 	}

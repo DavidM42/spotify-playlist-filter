@@ -13,6 +13,7 @@
 <div id="progressbar-wrapper">
 	<span class="time-status">{ millisToMinutesAndSeconds(currentTimeMs)}</span>
 	<div id="progressbar">
+		<!-- could be refactored with https://svelte.dev/tutorial/tweened -->
 		<div style="width: {currentTimeMs / maxTimeMs * 100}%;"></div>
 	</div>
 	<span class="time-status">{ millisToMinutesAndSeconds(maxTimeMs)}</span>
@@ -23,7 +24,7 @@
 
 	#progressbar-wrapper {
 		width: 100%;
-
+		min-width: 250px;
 		display: flex;
 	}
 

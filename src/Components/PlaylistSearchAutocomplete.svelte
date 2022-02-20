@@ -44,11 +44,12 @@
 <style lang="scss">
 	:global(.autocomplete) {
 		margin: 10px !important;
-		max-width: 364px !important;
+		// max-width: 364px !important;
+		max-width: 275px !important;
 	}
 
 	:global(.autocomplete-list) {
-		max-width: 364px;
+		max-width: 275px;
 		border: 0;
 		background-color: var(--background-base, #121212) !important;
 		border-color: var(--text-bright-accent) !important;
@@ -65,8 +66,6 @@
 		color: #000;
 		padding: 11px 30px 6px 30px !important;
 		text-overflow: ellipsis;
-		width: 100%;
-		max-width: 364px;
 	}
 
 	:global(.autocomplete:not(.hide-arrow):not(.is-loading)::after) {

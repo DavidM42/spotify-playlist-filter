@@ -48,12 +48,15 @@
 
 <style lang="scss">
 	.player {
-		display: flex;
 		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 
 		.track-info {
             width: 25%;
 			max-width: 350px;
+			min-width: 200px;
 		}
 
 		.status-and-control {
