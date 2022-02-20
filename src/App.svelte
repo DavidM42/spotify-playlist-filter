@@ -55,6 +55,7 @@
 	.description {
 		margin-bottom: 20px;
 		color: var(--text-subdued, #6a6a6a);
+		text-align: center;
 	}
 
 	#container {
