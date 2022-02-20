@@ -1,0 +1,7 @@
+/node_modules/
+/public/build/
+
+oldBackups/
+.env
+
+.DS_Store
