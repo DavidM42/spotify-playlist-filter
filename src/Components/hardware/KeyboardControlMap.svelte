@@ -58,8 +58,8 @@
 				break;
 
 			// 25% skip
-			case 'Shift':
-				dispatch('shift');
+			case 'Control':
+				dispatch('ctrl');
 				break;
 
 			// for volume control

@@ -280,7 +280,7 @@
 	bind:isKeyboardUsed
 	isActive={activateKeyboardListener}
 	on:space={() => togglePlayback()}
-	on:shift={() => nextPosition()}
+	on:ctrl={() => nextPosition()}
 	on:enter={() => addToTargetPlaylistThenSkip()}
 	on:up={() => volumeChange(10)}
 	on:down={() => volumeChange(-10)}

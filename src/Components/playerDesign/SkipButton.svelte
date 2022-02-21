@@ -28,7 +28,7 @@
         {:else if mode === 'BACKWARD'}
             <img class="key-hint-icon right-margin" src="/buttons/keyboard/A_Key_Light.png" alt="Backward via A Button">
         {:else if mode === 'FAST-FORWARD'}
-            <img class="key-hint-icon left-margin" src="/buttons/keyboard/Shift_Key_Light.png" alt="Fast-Forward via shift key">
+            <img class="key-hint-icon left-margin" src="/buttons/keyboard/Ctrl_Key_Light.png" alt="Fast-Forward via control key">
         {:else if mode === 'ADD'}
         <img class="key-hint-icon right-margin" src="/buttons/keyboard/Enter_Key_Light.png" alt="Add to playlist via Enter key">
         {/if}
