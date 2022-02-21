@@ -11,6 +11,7 @@
     export let showGamepadButtons: boolean = false;
     export let showKeyboardButtons: boolean = false;
 	export let isPaused: boolean;
+	export let autoFastForwardActive: boolean;
 
 	// playback
 	export let currentTimeMs: number;
@@ -36,6 +37,7 @@
 			<PlayPauseButton bind:isPaused {showGamepadButtons} {showKeyboardButtons} on:click={() => dispatch('playPause')} />
 			<SkipButton mode="FORWARD" {showGamepadButtons} {showKeyboardButtons} on:click={() => dispatch('skipForward')}/>
 			<SkipButton mode="FAST-FORWARD" {showGamepadButtons} {showKeyboardButtons} on:click={() => dispatch('fastForward')}/>
+			<SkipButton mode="AUTO-FAST-FORWARD-TOGGLE" {showGamepadButtons} {showKeyboardButtons} activated={autoFastForwardActive} on:click={() => dispatch('toggleAutoFastForward')}/>
 		</div>
 		<div class="status">
 			<ProgressBar bind:currentTimeMs bind:maxTimeMs />

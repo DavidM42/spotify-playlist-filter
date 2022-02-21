@@ -142,6 +142,7 @@
 	on:Connected={gamepadConnected}
 	gamepadIndex={0}
 	on:A={() => buttonPressed('A_Pressed', 200)}
+	on:B={() => buttonPressed('B_Pressed', 300)}
 	on:LB={() => buttonPressed('LB_Pressed', 100)}
 	on:RB={() => buttonPressed('RB_Pressed', 100)}
 	on:X={() => buttonPressed('X_Pressed', 100)}

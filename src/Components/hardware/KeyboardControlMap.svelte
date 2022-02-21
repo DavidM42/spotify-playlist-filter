@@ -91,6 +91,8 @@
 				dispatch('a');
 			case 'd':
 				dispatch('d');
+			case 's':
+				dispatch('s');
 		}
 	};
 </script>

@@ -17,6 +17,16 @@
 	let isKeyboardUsed: boolean = false;
 	let activateKeyboardListener = true;
 
+	/**
+	 * Skips first and last 25% of the track to save time.
+	 * Toggled via button or keymap.
+	 */
+	export let autoFastForwardActive: boolean = false;
+
+	const toggleAutoFastForward = () => {
+		autoFastForwardActive = !autoFastForwardActive;
+	}
+
 	const checkForPlaylistEnd = () => {
 		// had tip here but does not work :(
 		// TODO fix prevent auto play and notify user that he has finished playlist
@@ -39,6 +49,20 @@
 	const updateCurrentTimeEveryHalfSecondInMs = async () => {
 		// TODO maybe find smarter way of change detection to do this
 		currentTimeEveryHalfSecondInMs = (await player.getCurrentState()).position
+
+		// subscription effectively to skip first and last fourth of track if mode is active
+		if (autoFastForwardActive) {
+			if (currentTimeEveryHalfSecondInMs < 1000) {
+				// if within first second skip to 25%
+				nextPosition();
+			}
+
+			if (currentTimeEveryHalfSecondInMs > (state.duration * 0.75)) {
+				// if reached last 25% skip to next track
+				player.nextTrack();
+			}
+		}
+
 		// checkForPlaylistEnd();
 		setTimeout(updateCurrentTimeEveryHalfSecondInMs, 500);
 	}
@@ -279,6 +303,7 @@
 <GamepadControlMap
 	bind:isGamepadUsed
 	on:A_Pressed={() => togglePlayback()}
+	on:B_Pressed={() => toggleAutoFastForward()}
 	on:LB_Pressed={() => player.previousTrack()}
 	on:RB_Pressed={() => player.nextTrack()}
 	on:X_Pressed={() => nextPosition()}
@@ -300,6 +325,7 @@
 	on:down={() => volumeChange(-10)}
 	on:a={() => player.previousTrack()}
 	on:d={() => player.nextTrack()}
+	on:s={() => toggleAutoFastForward()}
 	on:rightStart={() => conditionalSeek(0.5)}
 	on:leftStart={() => conditionalSeek(-0.5)}
 	on:leftRightStop={() => seekRequestDirection = 0}
@@ -348,6 +374,7 @@
 	{#if sourcePlaylist && targetPlaylist}
 		<PlayerDesign
 			isPaused={state.paused}
+			{autoFastForwardActive}
 			title={state.track_window.current_track.name}
 			artist={state.track_window.current_track.artists[0].name}
 			imageUrl={state.track_window.current_track.album.images[0].url}
@@ -361,6 +388,7 @@
 			on:skipForward={() => player.nextTrack()}
 			on:fastForward={() => nextPosition()}
 			on:add={() => addToTargetPlaylistThenSkip()}
+			on:toggleAutoFastForward={() => toggleAutoFastForward()}
 		/>
 	{/if}
 </div>
