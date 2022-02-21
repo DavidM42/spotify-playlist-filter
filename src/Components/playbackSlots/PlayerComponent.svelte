@@ -167,6 +167,7 @@
 
 		if (initialPlay) {
 			initialPlay = false;
+			hintAtPlayStart = false;
 			spotifyApi.play({ context_uri: sourcePlaylist.uri });
 		} else {
 			player.togglePlay();
@@ -310,10 +311,7 @@
 
 		<div class="between-playlists">
 			{#if hintAtPlayStart}
-				<div class="start-hint" in:fade on:click={() => {
-					hintAtPlayStart = false;
-					togglePlayback();
-				}}>
+				<div class="start-hint" in:fade on:click={() => togglePlayback()}>
 					<IoIosPlay/>
 				</div>
 			{:else}
