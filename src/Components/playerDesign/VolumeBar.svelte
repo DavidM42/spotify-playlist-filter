@@ -19,7 +19,7 @@
 	<div id="volumebar-wrapper">
 		<!-- could be refactored with https://svelte.dev/tutorial/tweened -->
 		<div id="volumebar">
-			<div style="width: {volume * 100}%;" />
+			<div style="width: {Math.min(volume * 100, 100)}%;" />
 		</div>
 	</div>
 </div>

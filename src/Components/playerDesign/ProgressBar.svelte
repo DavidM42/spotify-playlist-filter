@@ -14,7 +14,7 @@
 	<span class="time-status">{ millisToMinutesAndSeconds(currentTimeMs)}</span>
 	<div id="progressbar">
 		<!-- could be refactored with https://svelte.dev/tutorial/tweened -->
-		<div style="width: {currentTimeMs / maxTimeMs * 100}%;"></div>
+		<div style="width: {Math.min(currentTimeMs / maxTimeMs * 100, 100)}%;"></div>
 	</div>
 	<span class="time-status">{ millisToMinutesAndSeconds(maxTimeMs)}</span>
 </div>
