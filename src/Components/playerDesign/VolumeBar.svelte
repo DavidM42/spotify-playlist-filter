@@ -36,6 +36,7 @@
 
 	#volume-icon {
 		height: 16px;
+		width: 16px;
 	}
 
 	#volumebar-wrapper {
