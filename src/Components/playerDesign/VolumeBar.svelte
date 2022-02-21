@@ -39,6 +39,13 @@
 		width: 16px;
 	}
 
+	:global(#volume-icon svg) {
+		// workaround to make volume icon svg bigger
+		// cleaner way would be to reduce padding within svg
+		// via svg property `viewBox="100 100 300 300"` but don't see how right now
+		transform: scale(1.35);
+	}
+
 	#volumebar-wrapper {
 		width: 100px;
 		display: flex;
