@@ -85,14 +85,16 @@
 		});
 	});
 
-	const nextPosition = () => {
+	/**
+	 * Seeks forward by 25% of total track time.
+	 * If that would be more than track time skips to next song.
+	 */
+	const nextPosition = async () => {
 		const trackTime = state.track_window.current_track.duration_ms;
-		// 25% in, 50% in, 75% in
-		const seekPositions = [trackTime / 4, (trackTime / 4) * 2, (trackTime / 4) * 3];
 
-		const nextPos = seekPositions.find((pos) => pos > state.position);
+		const nextPos = (await player.getCurrentState()).position + (trackTime / 4);
 
-		if (!nextPos) {
+		if (nextPos > trackTime) {
 			player.nextTrack();
 		} else {
 			player.seek(nextPos);
