@@ -106,6 +106,10 @@
 	let savedSourcePlaylist = JSON.parse(localStorage.getItem(SOURCE_PLAYLIST_KEY));
 	let sourcePlaylist: SpotifyApi.PlaylistObjectSimplified = savedSourcePlaylist || undefined;
 
+	/** Save last source playlist on every finished input to compare against event one on finish input*/
+	let previousSourcePlaylist: SpotifyApi.PlaylistObjectSimplified = savedSourcePlaylist || undefined;
+
+
 	/** Own or collaborative playlist to rip tracks into*/
 	const TARGET_PLAYLIST_KEY = 'targetPlaylist';
 	let savedTargetPlaylist = JSON.parse(localStorage.getItem(TARGET_PLAYLIST_KEY));
@@ -204,6 +208,13 @@
 			// dont autostart playback when previously saved playlists were auto selected
 			// return;
 		// }
+
+		if (event.detail.id == sourcePlaylist.id && event.detail.id !== previousSourcePlaylist.id) {
+			// if within input sourcePlaylist has changed then initial play mode again
+			// -> save as previous one and reset initial play mode
+			previousSourcePlaylist = sourcePlaylist;
+			initialPlay = true;
+		}
 
 		activateKeyboardListener = true;
 		await loadingToken;
