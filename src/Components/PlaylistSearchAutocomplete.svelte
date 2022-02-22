@@ -16,8 +16,8 @@
 	{searchFunction}
 	bind:selectedItem
 	onChange={(details) => dispatch('change',details)}
-	onFocus={dispatch('focus')}
-	onBlur={dispatch('blur')}
+	onFocus={() => dispatch('focus')}
+	onBlur={() => dispatch('blur')}
 
 	keywordsFunction={(keyword) => {return keyword}}
 	inputClassName="spotify-styled-input"
@@ -49,7 +49,11 @@
 	}
 
 	:global(.autocomplete-list) {
+		// sizing and no x overflow
 		max-width: 275px;
+		overflow-x: hidden;
+
+		// styling
 		border: 0;
 		background-color: var(--background-base, #121212) !important;
 		border-color: var(--text-bright-accent) !important;

@@ -69,7 +69,7 @@
 		// start showing gamepad hints and hide again after 20s of last use of
 		isGamepadUsed = true;
 		debounce('useTime',() => {
-			setTimeout(() => isGamepadUsed = false, 75000);
+			setTimeout(() => isGamepadUsed = false, 7500);
 		}, 7500);
 
 		debounce(eventName, () => {

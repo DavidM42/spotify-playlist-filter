@@ -48,7 +48,8 @@
 	let currentTimeEveryHalfSecondInMs = 0;
 	const updateCurrentTimeEveryHalfSecondInMs = async () => {
 		// TODO maybe find smarter way of change detection to do this
-		currentTimeEveryHalfSecondInMs = (await player.getCurrentState()).position
+		const retrievedState = (await player.getCurrentState());
+		currentTimeEveryHalfSecondInMs = retrievedState.position;
 
 		// subscription effectively to skip first and last fourth of track if mode is active
 		if (autoFastForwardActive) {
@@ -160,7 +161,7 @@
 		await loadingToken;
 
 		let items: SpotifyApi.PlaylistObjectSimplified[];
-		if (keywords.unfiltered) {
+		if (keywords && keywords.unfiltered) {
 			if (keywords.unfiltered.includes('https://open.spotify.com/playlist/')) {
 				const playlistId = keywords.unfiltered.replace('https://open.spotify.com/playlist/', '').split('?')[0];
 				const playlist = await spotifyApi.getPlaylist(playlistId)
@@ -220,27 +221,33 @@
 		activateKeyboardListener = false;
 	}
 
+	/**
+	 * Activate keyboard listener after input fields are closed
+	 */
+	const onInputBlur = () => {
+		activateKeyboardListener = true;
+	}
+
 	/** is true when ui should give user extra obious play button to get going. Otherwise false */
 	let hintAtPlayStart = false;;
 
 	/**
 	 * Check on select if both have been selected and auto starts playback
 	 */
-	const onFinishedInput = async (event: CustomEvent<SpotifyApi.PlaylistObjectSimplified>) => {
+	const onInputChange = async (event: CustomEvent<SpotifyApi.PlaylistObjectSimplified>) => {
 		// since we now only hint at it now autplay directly this is not needed atm
 		// if (event.detail.id === savedSourcePlaylist.id || event.detail.id === savedTargetPlaylist.id) {
 			// dont autostart playback when previously saved playlists were auto selected
 			// return;
 		// }
 
-		if (event.detail.id == sourcePlaylist.id && event.detail.id !== previousSourcePlaylist.id) {
+		if (event.detail.id == sourcePlaylist?.id && event.detail.id !== previousSourcePlaylist?.id) {
 			// if within input sourcePlaylist has changed then initial play mode again
 			// -> save as previous one and reset initial play mode
 			previousSourcePlaylist = sourcePlaylist;
 			initialPlay = true;
 		}
 
-		activateKeyboardListener = true;
 		await loadingToken;
 
 		// save the selected playlists to localstorage for next load
@@ -317,7 +324,7 @@
 
 <KeyboardControlMap
 	bind:isKeyboardUsed
-	isActive={activateKeyboardListener}
+	bind:isActive={activateKeyboardListener}
 	on:space={() => togglePlayback()}
 	on:ctrl={() => nextPosition()}
 	on:enter={() => addToTargetPlaylistThenSkip()}
@@ -341,18 +348,23 @@
 				bind:items={sourcePlaylistsPreloadItems}
 				searchFunction={searchPlaylists}
 				bind:selectedItem={sourcePlaylist}
-				on:change={onFinishedInput}
+				on:change={onInputChange}
 				on:focus={onStartInput}
+				on:blur={onInputBlur}
 			/>
 		</div>
 
 		<div class="between-playlists">
 			{#if hintAtPlayStart}
-				<div class="start-hint" in:fade on:click={() => togglePlayback()}>
+				<!-- TODO i18n for all titles -->
+				<div class="start-hint" title="Start playback" in:fade on:click={() => togglePlayback()}>
 					<IoIosPlay/>
 				</div>
 			{:else}
-				<div class="playlist-direction-arrow" in:fade>
+				<div
+					in:fade
+					class="playlist-direction-arrow"
+					title="{(sourcePlaylist && targetPlaylist) ? `Songs from ${sourcePlaylist?.name} will be added to ${targetPlaylist?.name}`: ''}">
 					<FaLongArrowAltRight/>
 				</div>
 			{/if}
@@ -365,15 +377,16 @@
 				bind:items={targetPlaylistsPreloadItems}
 				searchFunction={searchEditablePlayists}
 				bind:selectedItem={targetPlaylist}
-				on:change={onFinishedInput}
+				on:change={onInputChange}
 				on:focus={onStartInput}
+				on:blur={onInputBlur}
 			/>
 		</div>
 	</div>
 
 	{#if sourcePlaylist && targetPlaylist}
 		<PlayerDesign
-			isPaused={state.paused}
+			bind:isPaused={state.paused}
 			{autoFastForwardActive}
 			title={state.track_window.current_track.name}
 			artist={state.track_window.current_track.artists[0].name}

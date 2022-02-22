@@ -7,7 +7,10 @@
     export let showKeyboardButtons: boolean = false;
 </script>
 
-<button on:click class:hardware={showGamepadButtons || showKeyboardButtons}>
+<button 
+    title="Pause/Play"
+    on:click class:hardware={showGamepadButtons || showKeyboardButtons}
+    >
         <!-- icons from https://thoseawesomeguys.com/prompts/ -->
         {#if showGamepadButtons}
             <img class="key-hint-icon" src="/buttons/xbox/XboxSeriesX_A.png" alt="Play/Pause via A Button">
