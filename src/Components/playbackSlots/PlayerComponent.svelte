@@ -241,7 +241,7 @@
 			// return;
 		// }
 
-		if (event.detail.id == sourcePlaylist?.id && event.detail.id !== previousSourcePlaylist?.id) {
+		if (event.detail?.id && event.detail.id == sourcePlaylist?.id && event.detail.id !== previousSourcePlaylist?.id) {
 			// if within input sourcePlaylist has changed then initial play mode again
 			// -> save as previous one and reset initial play mode
 			previousSourcePlaylist = sourcePlaylist;
