@@ -66,7 +66,8 @@
 
 	:global(input.autocomplete-input.spotify-styled-input) {
 		border: 0;
-		border-radius: 500px;
+		// border-radius: 500px;
+		outline: none;
 		color: #000;
 		padding: 11px 30px 6px 30px !important;
 		text-overflow: ellipsis;
